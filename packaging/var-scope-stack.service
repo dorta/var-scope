@@ -1,0 +1,21 @@
+[Unit]
+Description=VAR-Scope container stack
+Requires=docker.service
+After=docker.service
+After=var-scope-demo-runner.service
+After=var-scope-camera-runner.service
+Wants=var-scope-demo-runner.service
+Wants=var-scope-camera-runner.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=-/etc/default/var-scope
+ExecStart=/opt/var-scope/bin/var-scope-stack start
+ExecReload=/opt/var-scope/bin/var-scope-stack start
+ExecStop=/opt/var-scope/bin/var-scope-stack stop
+TimeoutStartSec=0
+TimeoutStopSec=90
+
+[Install]
+WantedBy=multi-user.target
