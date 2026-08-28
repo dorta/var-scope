@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Diagnostics Lab · VAR-Scope</title>
+    <link rel="icon" type="image/png" href="/variscite-favicon.png" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/nav.css" />
+    <link rel="stylesheet" href="/brand.css" />
+    <link rel="stylesheet" href="/diagnostics.css" />
+  </head>
+  <body>
+    <div class="shell diagnostics-page">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="VAR-Scope dashboard"
+          ><img
+            class="brand-logo"
+            src="/variscite-logo-black.svg"
+            alt="Variscite"
+          /><span class="brand-product"
+            ><strong>Board Diagnostics</strong><small>VAR-SCOPE</small></span
+          ></a
+        >
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="/">Dashboard</a><a href="/hardware.html">Hardware</a
+          ><a href="/bsp.html">Board Support Package</a
+          ><a href="/lab.html">Lab</a
+          ><a href="/diagnostics.html" aria-current="page">Diagnostics</a
+          ><a class="support-nav" href="/support.html">Support</a>
+        </nav>
+        <div class="status">
+          <span class="pulse"></span><span id="connection">Connecting</span
+          ><time id="clock">--:--:--</time>
+        </div>
+      </header>
+      <main>
+        <section class="diagnostics-hero">
+          <div>
+            <p class="eyebrow">INTERACTIVE BOARD LAB</p>
+            <h1>Observe. Test. Explain.</h1>
+            <p>
+              Live events, transparent health decisions, guided troubleshooting,
+              and capability-aware hardware checks in one place.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <button id="event-mode-open" type="button">Launch Event Mode</button
+            ><a href="/api/v1/support-report" download>Download evidence ZIP</a>
+          </div>
+        </section>
+        <section class="health-overview">
+          <article id="health-orb" class="health-orb checking">
+            <span></span>
+            <div>
+              <small>BOARD HEALTH</small
+              ><strong id="health-status">Checking</strong>
+              <p id="health-summary">Evaluating live diagnostics</p>
+            </div>
+          </article>
+          <div class="health-counts">
+            <span><strong id="health-passed">—</strong>Passed</span
+            ><span><strong id="health-warnings">—</strong>Warnings</span
+            ><span><strong id="health-critical">—</strong>Critical</span>
+          </div>
+          <time id="health-time">—</time>
+        </section>
+        <section class="diagnostics-grid">
+          <article class="diagnostic-panel health-panel">
+            <header>
+              <div>
+                <p class="eyebrow">EXPLAINABLE HEALTH</p>
+                <h2>Why this status?</h2>
+              </div>
+              <span class="live-chip">LIVE</span>
+            </header>
+            <div id="health-checks" class="health-checks">
+              <p class="loading-copy">Evaluating checks…</p>
+            </div>
+          </article>
+          <article class="diagnostic-panel events-panel">
+            <header>
+              <div>
+                <p class="eyebrow">EVENT MONITOR</p>
+                <h2>Board timeline</h2>
+              </div>
+              <label
+                ><input id="critical-only" type="checkbox" /> Attention
+                only</label
+              >
+            </header>
+            <div id="event-list" class="event-list">
+              <p class="loading-copy">Reading board events…</p>
+            </div>
+          </article>
+        </section>
+        <section class="diagnostic-panel capabilities-panel">
+          <header>
+            <div>
+              <p class="eyebrow">HARDWARE LAB</p>
+              <h2>Detected capabilities</h2>
+              <p>
+                Features are enabled only when the running kernel exposes the
+                required interface.
+              </p>
+            </div>
+            <span id="capability-count" class="tag">DETECTING</span>
+          </header>
+          <div id="capability-list" class="capability-list"></div>
+        </section>
+        <section class="diagnostics-grid lower-grid">
+          <article class="diagnostic-panel guides-panel">
+            <header>
+              <div>
+                <p class="eyebrow">GUIDED TROUBLESHOOTING</p>
+                <h2>Start with the symptom</h2>
+              </div>
+            </header>
+            <div class="guide-layout">
+              <nav id="guide-list" class="guide-list"></nav>
+              <div id="guide-detail" class="guide-detail">
+                <p class="loading-copy">Preparing guided checks…</p>
+              </div>
+            </div>
+          </article>
+          <article class="diagnostic-panel actions-panel">
+            <header>
+              <div>
+                <p class="eyebrow">SAFE ACTIONS</p>
+                <h2>Run a diagnostic</h2>
+                <p>
+                  Read-only, allowlisted, and recorded in the event timeline.
+                </p>
+              </div>
+            </header>
+            <div id="action-list" class="action-list"></div>
+            <div id="action-result" class="action-result hidden"></div>
+          </article>
+        </section>
+        <section class="diagnostic-panel developer-panel">
+          <header>
+            <div>
+              <p class="eyebrow">DEVELOPER PLAYGROUND</p>
+              <h2>Inspect without changing state</h2>
+              <p>
+                Deep links into the existing read-only inventory and evidence
+                tools.
+              </p>
+            </div>
+          </header>
+          <div class="developer-links">
+            <a href="/hardware.html"
+              ><span>HW</span><strong>Hardware Explorer</strong
+              ><small>Device Tree, buses, modules, resources</small></a
+            ><a href="/bsp.html"
+              ><span>BSP</span><strong>Build provenance</strong
+              ><small>Layers, revisions, kernel and distro</small></a
+            ><a href="/lab.html?view=camera"
+              ><span>CAM</span><strong>Camera Lab</strong
+              ><small>V4L2 inventory and live stream</small></a
+            ><a href="/support.html"
+              ><span>LOG</span><strong>Evidence Explorer</strong
+              ><small>Kernel events and redacted report preview</small></a
+            >
+          </div>
+        </section>
+      </main>
+      <dialog id="event-mode" class="event-mode">
+        <button
+          id="event-mode-close"
+          type="button"
+          aria-label="Exit Event Mode"
+        >
+          Exit Event Mode ×
+        </button>
+        <div class="event-brand">
+          <img src="/variscite-logo-black.svg" alt="Variscite" /><span
+            >LIVE EVALUATION EXPERIENCE</span
+          >
+        </div>
+        <section class="event-product">
+          <div>
+            <p>ACTIVE DEVICE</p>
+            <h2 id="event-product-name">Loading…</h2>
+            <strong id="event-product-model">Reading Device Tree</strong>
+            <div id="event-product-tags"></div>
+          </div>
+          <img id="event-product-image" alt="" />
+        </section>
+        <section class="event-metrics">
+          <article><span>CPU</span><strong id="event-cpu">—</strong></article>
+          <article>
+            <span>MEMORY</span><strong id="event-memory">—</strong>
+          </article>
+          <article>
+            <span>TEMPERATURE</span><strong id="event-temperature">—</strong>
+          </article>
+          <article>
+            <span>UPTIME</span><strong id="event-uptime">—</strong>
+          </article>
+        </section>
+        <section class="event-stage">
+          <div>
+            <p class="eyebrow">WHAT IS HAPPENING NOW</p>
+            <div id="event-feature" class="event-feature">
+              Waiting for the next board event…
+            </div>
+          </div>
+          <aside>
+            <small>BOARD HEALTH</small
+            ><strong id="event-health">Checking</strong>
+            <p id="event-access-url"></p>
+          </aside>
+        </section>
+      </dialog>
+      <footer>
+        <span>VAR-Scope Diagnostics Lab</span
+        ><span>Capability-aware · read-only by default</span>
+      </footer>
+    </div>
+    <script src="/diagnostics.js" defer></script>
+  </body>
+</html>
